@@ -10,7 +10,7 @@ public class Main {
     public static final String PLAIN = "plain.bmp";
     public static final String ECB_FILE = "ecb_crypto.bmp";
     public static final String CBC_FILE = "cbc_crypto.bmp";
-    private static final int DELTA = 0x9e3779a1;
+    private static final int DELTA = 0x9e3779b9;
 
     public static void main(String[] args) throws IOException {
         ECB();
@@ -39,7 +39,7 @@ public class Main {
         return key;
     }
 
-    public static int[] ECBEncrypt(int[] plainText, int key[]) {
+    public static int[] ECBEncrypt(int[] plainText, int[] key) {
         int sum = 0;
         int left = plainText[0];
         int right = plainText[1];
@@ -50,7 +50,7 @@ public class Main {
             right += ((left << 4) + key[2]) ^ (left + sum) ^ ((left >> 5) + key[3]);
         }
 
-        int block[] = new int[2];
+        int[] block = new int[2];
         block[0] = left;
         block[1] = right;
 
@@ -59,7 +59,7 @@ public class Main {
 
     public static void ECB() throws IOException {
         int[] img = new int[2];
-        int key[] = keyReader();
+        int[] key = keyReader();
 
         FileInputStream imgIn = new FileInputStream(PLAIN);
         FileOutputStream imgOut = new FileOutputStream(ECB_FILE);
@@ -75,7 +75,7 @@ public class Main {
             }
         }
 
-        int cipher[];
+        int[] cipher;
         boolean check = true;
 
         while (dataIn.available() > 0) {
@@ -98,7 +98,7 @@ public class Main {
         dataOut.close();
     }
 
-    public static int[] CBCEncrypt(int[] plainText, int[] previous, int key[]) throws FileNotFoundException {
+    public static int[] CBCEncrypt(int[] plainText, int[] previous, int[] key) {
         int sum = 0;
         int left = plainText[0] ^ previous[0];
         int right = plainText[1] ^ previous[1];
@@ -108,7 +108,7 @@ public class Main {
             left += ((right << 4) + key[0]) ^ (right + sum) ^ ((right >> 5) + key[1]);
             right += ((left << 4) + key[2]) ^ (left + sum) ^ ((left >> 5) + key[3]);
         }
-        int block[] = new int[2];
+        int[] block = new int[2];
         block[0] = left;
         block[1] = right;
         return block;
@@ -116,9 +116,9 @@ public class Main {
 
     public static void CBC() throws IOException {
         int[] img = new int[2];
-        int key[] = keyReader();
+        int[] key = keyReader();
         Random rand = new Random();
-        int random[] = {rand.nextInt(), rand.nextInt()};
+        int[] random = {rand.nextInt(), rand.nextInt()};
 
         FileInputStream imgIn = new FileInputStream(PLAIN);
         FileOutputStream imgOut = new FileOutputStream(CBC_FILE);
@@ -134,7 +134,7 @@ public class Main {
             }
         }
         boolean firstTime = true;
-        int cipher[] = new int[2];
+        int[] cipher = new int[2];
         boolean check = true;
         while (dataIn.available() > 0) {
             try {
